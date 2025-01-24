@@ -1,5 +1,3 @@
-package com.template.sprintTemplate;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -1,0 +1,13 @@
+package com.template.sprintTemplate;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SprintTemplateApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(SprintTemplateApplication.class, args);
+	}
+
+}

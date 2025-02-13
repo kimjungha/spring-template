@@ -4,4 +4,4 @@
 
 # DB Replication config
 
-# Redis 사용한 Cache
+# Redis 사용한 캐싱

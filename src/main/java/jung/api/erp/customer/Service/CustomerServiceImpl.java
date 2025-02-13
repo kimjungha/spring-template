@@ -1,4 +1,4 @@
-package jung.api.ERP.Customer.Service;
+package jung.api.erp.customer.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

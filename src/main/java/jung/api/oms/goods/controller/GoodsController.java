@@ -1,4 +1,4 @@
-package jung.api.OMS.goods.controller;
+package jung.api.oms.goods.controller;
 
 import jung.global.annotation.ApiTrackingCustom;
 import jung.global.constants.ApiType;

@@ -1,6 +1,6 @@
-package jung.api.ERP.Customer;
+package jung.api.erp.customer;
 
-import jung.api.ERP.Customer.Service.CustomerService;
+import jung.api.erp.customer.Service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

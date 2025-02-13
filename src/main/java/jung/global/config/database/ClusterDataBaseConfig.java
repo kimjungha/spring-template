@@ -1,4 +1,4 @@
-package jung.global.config;
+package jung.global.config.database;
 
 import com.zaxxer.hikari.HikariDataSource;
 import jung.global.config.database.RoutingDataSource;

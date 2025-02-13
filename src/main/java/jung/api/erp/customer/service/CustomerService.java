@@ -1,4 +1,4 @@
-package jung.api.erp.customer.Service;
+package jung.api.erp.customer.service;
 
 import java.util.List;
 

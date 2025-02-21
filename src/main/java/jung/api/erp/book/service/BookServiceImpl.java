@@ -1,7 +1,6 @@
 package jung.api.erp.book.service;
 
 import jung.api.erp.book.controller.response.BookReadResponse;
-import jung.api.erp.book.domain.entity.Book;
 import jung.api.erp.book.domain.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;

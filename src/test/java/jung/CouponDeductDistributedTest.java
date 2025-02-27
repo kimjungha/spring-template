@@ -1,7 +1,7 @@
 package jung;
 
 import jung.api.erp.coupon.domain.entity.Coupon;
-import jung.api.erp.coupon.domain.entity.CouponRepository;
+import jung.api.erp.coupon.domain.repository.CouponRepository;
 import jung.api.erp.coupon.service.CouponService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
-public class couponDeductDistributedTest {
+public class CouponDeductDistributedTest {
     @Autowired
     private CouponService couponService;
 

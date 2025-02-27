@@ -1,7 +1,7 @@
 package jung.api.erp.coupon.service;
 
 import jung.api.erp.coupon.domain.entity.Coupon;
-import jung.api.erp.coupon.domain.entity.CouponRepository;
+import jung.api.erp.coupon.domain.repository.CouponRepository;
 import jung.global.annotation.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

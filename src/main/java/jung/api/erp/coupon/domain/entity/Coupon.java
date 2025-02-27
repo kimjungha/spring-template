@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +32,9 @@ public class Coupon {
 
     @Column(name = "available_count")
     private Long availableCount; //이용가능한 쿠폰 수
+
+    @Column(name = "price")
+    private BigDecimal price; //쿠폰 할인 가격
 
     @Override
     public String toString() {

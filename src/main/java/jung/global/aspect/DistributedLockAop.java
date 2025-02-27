@@ -42,6 +42,7 @@ public class DistributedLockAop {
                 return false;
             }
             // 락 획득하면 본 비즈니스 로직 수행
+            log.info("락 획득==>"+key);
             return aopForTransaction.proceed(joinPoint); //트랜잭션 새로 만든거에다가 joinPoint 비즈니스 로직 수행
         } catch (InterruptedException e) {
             throw new InterruptedException();

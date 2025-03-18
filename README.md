@@ -8,3 +8,5 @@ Swagger : http://localhost:8080/swagger-ui/index.html
 # Redis 사용한 캐싱(Lettuce)
 
 # Redisson 분산락 적용
+
+# Spring Security - JWT token Login 

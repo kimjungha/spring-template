@@ -1,6 +1,8 @@
 package jung.api.login.controller;
 
 import jakarta.validation.Valid;
+import jung.api.login.controller.request.LoginRequest;
+import jung.api.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LoginController {
 
-//    @PostMapping
-//    public LoginResponse login(@Valid @RequestBody )
+    private final LoginService loginService;
+
+    @PostMapping
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) throws Exception {
+        log.info("로그인 컨트롤러 진입");
+        return loginService.login(request);
+    }
 
 }

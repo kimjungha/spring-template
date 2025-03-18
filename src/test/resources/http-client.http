@@ -1,0 +1,12 @@
+GET http://localhost:8080/
+Accept: application/json
+
+###
+### POST 요청 (예: 로그인 요청)
+POST http://localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "loginId": "user123",
+  "password": "password123"
+}

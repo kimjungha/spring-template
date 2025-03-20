@@ -33,18 +33,23 @@ public class LoginService {
                     passWord
                 )
             );
+            // ✅ 인증된 Authentication 객체 확인
+            System.out.println("로그인 성공: " + authentication);
+            System.out.println("인증된 사용자: " + authentication.getPrincipal());
+            System.out.println("사용자 권한: " + authentication.getAuthorities());
+
         } catch (BadCredentialsException e) {
             throw new Exception("사용자 정보가 옳지 않습니다.");
+        }catch (Exception e) {
+            // ✅ 모든 예외를 잡아서 출력
+            e.printStackTrace(); // 예외 메시지를 출력하여 어떤 문제인지 확인
+            throw new Exception("로그인 과정에서 알 수 없는 오류 발생: " + e.getMessage());
         }
 
-        // 인증된 사용자 정보 SecurityContext에 저장
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String accessToken = jwtTokenProvider.generateAccessToken(authentication);
-        System.out.println("로그인 성공");
+        System.out.println("로그인 성고오 액세스 토큰 반환"+ accessToken);
         return LoginResponse.builder()
             .accessToken(accessToken)
             .build();
-
     }
 }

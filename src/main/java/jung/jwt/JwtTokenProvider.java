@@ -51,14 +51,14 @@ public class JwtTokenProvider {
     public String generateAccessToken(Authentication authentication){
         String username = authentication.getName();
 
-        String roles = authentication.getAuthorities()
+        List<String> roles = authentication.getAuthorities()
             .stream()
             .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.joining(","));  // 여러개 role 을 쉼표로 구분
+            .toList();
 
         return Jwts.builder()
             .setSubject(username) // 사용자 이름 : 토큰의 주체 (사용자 id 저장)
-            .claim("roles",roles)   // role 저장
+            .claim("roles",roles)   // role 저장  -> List<String> 으로 저장
             .setIssuedAt(new Date()) // 토큰 발급 시간
             .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 1시간 유효 (현재 시간 + 토큰 유효 시간)
             .signWith(secretKey,SignatureAlgorithm.HS256) //토큰에 서명 추가, 토큰 진위 검증할때 지정
@@ -102,6 +102,8 @@ public class JwtTokenProvider {
       // 2️⃣ JWT에서 사용자 정보(Username, Role 등) 추출
       String username = claims.getSubject(); // 사용자 ID 또는 이메일
       List<String> roles = claims.get("roles", List.class);
+
+      log.info("검증된 사용자 정보 ==>"+username);
 
       // 3️⃣ UserDetails 객체 생성 (Spring Security에서 사용)
       UserDetails userDetails = User.withUsername(username)

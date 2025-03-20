@@ -1,5 +1,6 @@
 package jung.api.login.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jung.api.login.controller.request.LoginRequest;
 import jung.api.login.service.LoginService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping("/login")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "BearerAuth")
 public class LoginController {
 
     private final LoginService loginService;

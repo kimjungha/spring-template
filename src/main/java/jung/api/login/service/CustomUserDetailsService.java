@@ -23,8 +23,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // ✅ UserDetails 객체로 변환하여 반환
         return User.withUsername(user.getUsername())
-            .password(user.getPassword()) // 암호화된 비밀번호 저장 (BCrypt)
-            .roles(user.getRole()) // 권한 설정
+            .password(user.getPassword())
+            .authorities(user.getRole())
             .build();
     }
 }

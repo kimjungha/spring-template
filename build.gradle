@@ -64,6 +64,9 @@ dependencies {
 	/** swagger (http://localhost:8080/swagger-ui.html)*/
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
+	/** elastic search */
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
 	/** prometheus */
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 

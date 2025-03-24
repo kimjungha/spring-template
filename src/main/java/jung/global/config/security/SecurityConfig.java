@@ -34,6 +34,7 @@ public class SecurityConfig {
         "swagger-ui/index.html",
         "/swagger-resources/**",  //  Swagger 설정
         "/docs/**",
+        "/products/**",
         "/v3/api-docs/**",     // OpenAPI JSON 데이터 엔드포인트
         "/webjars/**"          // Swagger UI에서 사용되는 웹 리소스
     };

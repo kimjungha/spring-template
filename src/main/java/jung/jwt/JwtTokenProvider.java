@@ -24,10 +24,9 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Component
 @Slf4j
+@Component
 public class JwtTokenProvider {
 
     @Value("${jwt.accessToken.expired}")
@@ -37,6 +36,7 @@ public class JwtTokenProvider {
     private String secret_key;
 
     private static SecretKey secretKey;
+
     @PostConstruct
     public void init() {
         secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret_key));

@@ -1,0 +1,40 @@
+
+jwt:
+  key: Q5k8eK7r9P4vZ1xY0aN+7mHc2uZ0D1S4n8wJ6rE9A=45461616161
+  accessToken:
+    expired: 10000
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/test
+    username: root
+    password: abc123!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: abc123!
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password: mmWmo_kbeCW5yH2pLr+-
+  jpa:
+    hibernate:
+      ddl-auto: none   # 개발용
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: webhook-consumer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"

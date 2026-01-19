@@ -5,13 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jung.global.error.BusinessErrorCode;
+import jung.global.exception.BusinessException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 
@@ -47,7 +47,6 @@ public class Coupon {
 
     // 쿠폰 차감
     public void decrease() {
-        // coupon count validate
         validateCouponCount();
         availableCount = availableCount-1;
     }
@@ -55,7 +54,7 @@ public class Coupon {
     // 쿠폰 수 검증
     private void validateCouponCount() {
         if(availableCount<1){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "쿠폰이 소진되었습니다.");
+            throw new BusinessException(BusinessErrorCode.COUPON_NO_VALUE);
         }
     }
 }

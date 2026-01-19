@@ -26,7 +26,7 @@ public class WebhookRetryScheduler {
     private final WebhookService webhookService;
 
     @Scheduled(fixedDelay = 30_000) // 30 초마다
-    public void retryWebhook(){
+    public void retryWebhook() throws JsonProcessingException {
         LocalDateTime now = LocalDateTime.now();
         log.info("{} 시간 기준 스케줄링 실행",now);
         List<WebhookLog> targets = webhookLogRepository.findByStatusAndRetryCountLessThanAndNextRetryAtLessThanEqual(
@@ -49,11 +49,7 @@ public class WebhookRetryScheduler {
     /*
     * string convert to WebhookEvent
     */
-    private WebhookEvent deserialize(String payload) {
-        try {
-            return objectMapper.readValue(payload, WebhookEvent.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    private WebhookEvent deserialize(String payload) throws JsonProcessingException {
+        return objectMapper.readValue(payload, WebhookEvent.class);
     }
 }

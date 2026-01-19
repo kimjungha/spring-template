@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 @RestController
-@RequiredArgsConstructor //생성자 직접 작성 없이 주입 자동으로 설정가능
+@RequiredArgsConstructor
 @RequestMapping("/erp/read/customer")
 public class CustomerReadController {
 

@@ -19,7 +19,12 @@ SOLID는 아래 5가지 원칙의 앞글자를 딴 약자다.
 - **D**: Dependency Inversion Principle (DIP) - 의존 역전 원칙
 
 ---
+## OCP – Open/Closed Principle
+### 개방 폐쇄 원칙
+** 확장에는 열려 있고, 변경에는 닫혀 있어야 한다. **
 
+기존코드를 수정하지 않고서, 새 기능을 추가할 수 있어야 한다.
+---
 ## DIP – Dependency Inversion Principle
 ### 의존 역전 원칙
 

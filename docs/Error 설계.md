@@ -35,7 +35,11 @@ ErrorCode (interface)
 
 ### 3️⃣ DIP 의존성 역전 원칙
 * 고수준 모듈은 저수준 모듈에 의존하면 안된다. (추상화에 의존해야한다.)
+* 고수준 : 비즈니스 정책 구현
+* 저수준 : 기술/세부 구현
 
+비즈니스 정책이 기술을 A를 쓰든, B를 쓰든 의존하면 안된다. 
+즉 ErrorCode 세부사항에 따라 BusinessException 가 의존하면 안된다. 
 
 * ❌ DIP 위반
   `BusinessException → WalletErrorCode (구현)`
@@ -45,20 +49,20 @@ BusinessException → ErrorCode (interface)
 WalletErrorCode → ErrorCode (implements)
 ```
 
-### ErrorCode 를 단일 Enum 으로 관리하면
+### 따라서 ErrorCode 를 단일 Enum 으로 관리하면
 Exception / Handler / Response 가 특정 Enum 구현에 종속된다.
-이는 도메인 확장 시 Enum 비대화와 높은 결합도를 유발한다.
+이는 에러코드가 확장 시 Enum 비대화와 높은 결합도를 유발한다.
 
 ### 따라서 ErrorCode 를 interface 로 추상화하고
-도메인별 Enum 이 이를 구현하도록 하여
-고수준 모듈이 추상화에만 의존하도록 설계한다.
-이는 DIP 를 만족하며, 도메인 분리와 확장에 유리하다.
-
+따라서 ErrorCode를 interface로 추상화하여 공통 규격을 정의하고,
+각 도메인(역할)에 맞는 ErrorCode를 enum으로 구현한다.
+고수준 모듈은 특정 ErrorCode 구현에 의존하지 않고
+ErrorCode 인터페이스에만 의존하도록 설계한다.
 
 ```java
 public class BaseException {
     private final ErrorCode errorCode; //인터페이스로 선언하면 여러 ErrorCode 사용가능
 }
 ```
-  
 
+  ### 하지만 모든 설계는 시스템의 규모, 확장성 등등을 고려하여 시스템에 맞게 진행하자, 오히려 오버엔지니어링이 될 수도 있다!

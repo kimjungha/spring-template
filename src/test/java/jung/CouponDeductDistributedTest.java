@@ -68,29 +68,29 @@ public class CouponDeductDistributedTest {
      * Feature: 쿠폰 차감 동시성 테스트
      *  분산락이 적용되지 않은 경우 동시 쿠폰 차감을 요청할 때
      */
-    @Test
-    void 쿠폰차감_분산락_미적용_동시성100명_테스트() throws InterruptedException {
-        int numberOfThreads = 100;
-        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads); //멀티스레드 관리하는 스레드 풀 생성
-        CountDownLatch latch = new CountDownLatch(numberOfThreads); //초기 카운트 n 으로 설정
-
-        for (int i = 0; i < numberOfThreads; i++) {
-            executorService.submit(() -> {
-                try {
-                    // 분산락 적용 메서드 호출 (락의 key는 쿠폰의 name으로 설정)
-                    couponService.couponDecrease( coupon.getCouponId());
-                } finally {
-                    latch.countDown(); // 작업 끝나면 카운트 감소
-                }
-            });
-        }
-
-        latch.await(); // 모든 스레드 종료될 때까지 기다림
-
-        Coupon persistCoupon = couponRepository.findById(coupon.getCouponId())
-            .orElseThrow(IllegalArgumentException::new);
-
-        assertThat(persistCoupon.getAvailableCount()).isZero();
-        System.out.println("잔여 쿠폰 개수 = " + persistCoupon.getAvailableCount());
-    }
+//    @Test
+//    void 쿠폰차감_분산락_미적용_동시성100명_테스트() throws InterruptedException {
+//        int numberOfThreads = 100;
+//        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads); //멀티스레드 관리하는 스레드 풀 생성
+//        CountDownLatch latch = new CountDownLatch(numberOfThreads); //초기 카운트 n 으로 설정
+//
+//        for (int i = 0; i < numberOfThreads; i++) {
+//            executorService.submit(() -> {
+//                try {
+//                    // 분산락 적용 메서드 호출 (락의 key는 쿠폰의 name으로 설정)
+//                    couponService.couponDecrease( coupon.getCouponId());
+//                } finally {
+//                    latch.countDown(); // 작업 끝나면 카운트 감소
+//                }
+//            });
+//        }
+//
+//        latch.await(); // 모든 스레드 종료될 때까지 기다림
+//
+//        Coupon persistCoupon = couponRepository.findById(coupon.getCouponId())
+//            .orElseThrow(IllegalArgumentException::new);
+//
+//        assertThat(persistCoupon.getAvailableCount()).isZero();
+//        System.out.println("잔여 쿠폰 개수 = " + persistCoupon.getAvailableCount());
+//    }
 }

@@ -1,0 +1,23 @@
+name: SonarQube Branch Analysis
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=my-spring-app \
+            -Dsonar.host.url=http://localhost:9000 \
+            -Dsonar.login=$SONAR_TOKEN \
+            -Dsonar.branch.name=${{ github.ref_name }}

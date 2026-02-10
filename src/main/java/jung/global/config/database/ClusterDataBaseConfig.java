@@ -1,7 +1,6 @@
 package jung.global.config.database;
 
 import com.zaxxer.hikari.HikariDataSource;
-import jung.global.config.database.RoutingDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -47,12 +46,10 @@ public class ClusterDataBaseConfig {
         @Qualifier(MASTER_DATASOURCE) DataSource masterDataSource,
         @Qualifier(SLAVE_DATASOURCE) DataSource slaveDataSource) {
 
-        Map<Object, Object> datasourceMap = new HashMap<>() {
-            {
-                put("master", masterDataSource);
-                put("slave", slaveDataSource);
-            }
-        };
+        Map<Object, Object> datasourceMap = new HashMap<>();
+        datasourceMap.put("master", masterDataSource);
+        datasourceMap.put("slave", slaveDataSource);
+
         RoutingDataSource routingDataSource = new RoutingDataSource();
         routingDataSource.setDefaultTargetDataSource(masterDataSource);
         routingDataSource.setTargetDataSources(datasourceMap);

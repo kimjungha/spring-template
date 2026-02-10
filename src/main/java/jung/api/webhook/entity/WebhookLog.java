@@ -87,7 +87,7 @@ public class WebhookLog {
         }
         status = "RETRY";
         retryCount++;
-        long delayTime = (long) (baseDelaySeconds * Math.pow(2, this.retryCount - 1));
+        long delayTime = (long) (baseDelaySeconds * Math.pow(2.0, (double)this.retryCount - 1));
         nextRetryAt = LocalDateTime.now().plusSeconds(delayTime);
     }
 }

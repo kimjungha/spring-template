@@ -25,7 +25,7 @@ public class WebhookRetryScheduler {
     private final WebhookLogRepository webhookLogRepository;
     private final WebhookService webhookService;
 
-    @Scheduled(fixedDelay = 30_000) // 30 초마다
+//    @Scheduled(fixedDelay = 300_000)
     public void retryWebhook() throws JsonProcessingException {
         LocalDateTime now = LocalDateTime.now();
         log.info("{} 시간 기준 스케줄링 실행",now);

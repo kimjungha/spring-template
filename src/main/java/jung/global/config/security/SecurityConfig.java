@@ -36,7 +36,7 @@ public class SecurityConfig {
         "/docs/**",
         "/products/**",
         "/webhook/**"   ,
-        "/actuator/health",
+        "/actuator/**",
         "/v3/api-docs/**",     // OpenAPI JSON 데이터 엔드포인트
         "/webjars/**",          // Swagger UI에서 사용되는 웹 리소스
         "/erp/read/book/**"     // 임시 test 용으로 인증제외

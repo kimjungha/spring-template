@@ -4,12 +4,10 @@ import jung.api.login.controller.LoginResponse;
 import jung.api.login.controller.request.LoginRequest;
 import jung.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -47,7 +45,7 @@ public class LoginService {
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(authentication);
-        System.out.println("로그인 성고오 액세스 토큰 반환"+ accessToken);
+        System.out.println("로그인 성공 액세스 토큰 반환"+ accessToken);
         return LoginResponse.builder()
             .accessToken(accessToken)
             .build();

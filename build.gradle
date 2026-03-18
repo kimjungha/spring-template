@@ -2,6 +2,11 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.gorylenko.gradle-git-properties' version '2.5.7'
+}
+
+springBoot {
+	buildInfo()
 }
 
 group = 'com.template'
@@ -33,6 +38,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 //	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.40'
+	implementation 'org.bitcoinj:bitcoinj-core:0.16.2'
 
 	/** tomcat security patch */
 	implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.47'

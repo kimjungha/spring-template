@@ -10,7 +10,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 import io.jsonwebtoken.security.SecurityException;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,17 +28,15 @@ import java.util.List;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${jwt.accessToken.expired}")
-    private long accessTokenExpired; // 인증 만료 시간
+    private final SecretKey secretKey;
+    private final long expirationMs;
 
-    @Value("${jwt.key}")
-    private String secret_key;
-
-    private static SecretKey secretKey;
-
-    @PostConstruct
-    public void init() {
-        secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret_key));
+    public JwtTokenProvider(
+        @Value("${jwt.secret_key}") String secret_key,
+        @Value("${jwt.expired}") long expirationMs
+    ) {
+        this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret_key));
+        this.expirationMs = expirationMs;
     }
 
     /**
@@ -56,13 +53,16 @@ public class JwtTokenProvider {
             .map(GrantedAuthority::getAuthority)
             .toList();
 
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + expirationMs);
+
         return Jwts.builder()
-            .setSubject(username) // 사용자 이름 : 토큰의 주체 (사용자 id 저장)
+            .setSubject(username)
             .claim("roles",roles)   // role 저장  -> List<String> 으로 저장
-            .setIssuedAt(new Date()) // 토큰 발급 시간
-            .setExpiration(new Date(System.currentTimeMillis() + 3600000)) // 1시간 유효 (현재 시간 + 토큰 유효 시간)
+            .setIssuedAt(now)
+            .setExpiration(expiry)
             .signWith(secretKey,SignatureAlgorithm.HS256) //토큰에 서명 추가, 토큰 진위 검증할때 지정
-            .compact();  // 설정한 정보 바탕으로 JWT 생성 -> 문자열로 반환
+            .compact();
     }
 
   /** JWT 토큰 검증 */

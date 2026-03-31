@@ -1,8 +1,7 @@
 name: SonarQube Branch Analysis
 
 on:
-  push:
-    branches: [ "main", "develop" ]
+  workflow_dispatch:  # 수동으로만 실행
 
 jobs:
   sonar:

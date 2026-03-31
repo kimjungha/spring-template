@@ -1,6 +1,38 @@
 version: '3.8'
 
 services:
+#  mysql:
+#    image: mysql:8.0
+#    container_name: mysql
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: abc123!
+#      MYSQL_DATABASE: study
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+
+#  redis:
+#    image: redis:7.2
+#    container_name: redis
+#    ports:
+#      - "6379:6379"
+#    command: redis-server --requirepass abc123!
+#    volumes:
+#      - redis_data:/data
+
+  elasticsearch:
+    image: elasticsearch:8.12.2
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    environment:
+      - ELASTIC_PASSWORD=6OK3B082=OUt9j2lC8OW
+      - xpack.security.http.ssl.enabled=false
+      - discovery.type=single-node
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
@@ -21,3 +53,8 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+volumes:
+  mysql_data:
+  redis_data:
+  es_data:

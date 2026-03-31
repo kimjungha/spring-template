@@ -1,3 +1,6 @@
+# 개발환경 구축
+docker-compose up -d
+
 ### BackEnd Study
 Swagger : http://localhost:8080/api/swagger-ui/index.html
 
@@ -20,3 +23,4 @@ Swagger : http://localhost:8080/api/swagger-ui/index.html
 # Webhook 전송 및 재전송 프로세스
 ### 재전송, 웹훅로그정보 저장, Kafka 사용 , 초기 전송과 재전송의 내용은 동일해야한다. 
 
+# SSE - 결제 상태 실시간 업데이트

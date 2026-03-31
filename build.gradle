@@ -86,6 +86,9 @@ dependencies {
 	/** kafka*/
 	implementation 'org.springframework.kafka:spring-kafka'
 
+	/** WebSocket */
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 	/** test */
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'

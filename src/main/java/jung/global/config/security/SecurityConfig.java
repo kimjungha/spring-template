@@ -41,7 +41,8 @@ public class SecurityConfig {
         "/payment/confirm/**", // 결제 확인 엔드포인트
         "/v3/api-docs/**",     // OpenAPI JSON 데이터 엔드포인트
         "/webjars/**",          // Swagger UI에서 사용되는 웹 리소스
-        "/erp/read/book/**"     // 임시 test 용으로 인증제외
+        "/erp/read/book/**",    // 임시 test 용으로 인증제외
+        "/ws/**"                // WebSocket 연결
     };
 
     @Bean

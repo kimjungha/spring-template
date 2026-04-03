@@ -2,6 +2,8 @@ package jung.global.config.security;
 
 import jung.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import net.devh.boot.grpc.server.autoconfigure.GrpcServerSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +25,7 @@ import java.util.Arrays;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
+@EnableAutoConfiguration(exclude = {GrpcServerSecurityAutoConfiguration.class})
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -41,7 +44,6 @@ public class SecurityConfig {
         "/payment/confirm/**", // 결제 확인 엔드포인트
         "/v3/api-docs/**",     // OpenAPI JSON 데이터 엔드포인트
         "/webjars/**",          // Swagger UI에서 사용되는 웹 리소스
-        "/erp/read/book/**",    // 임시 test 용으로 인증제외
         "/ws/**"                // WebSocket 연결
     };
 

@@ -8,10 +8,16 @@ import jung.api.webhook.infra.WebhookProducer;
 import jung.api.webhook.repository.WebhookLogRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.HexFormat;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -19,6 +25,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class WebhookService {
+
+    @Value("${webhook.secret}")
+    private String webhookSecret;
+
+    @Value("${webhook.site}")
+    private String webhookSite;
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
@@ -42,9 +54,9 @@ public class WebhookService {
         webhookProducer.publish(event);
     }
 
-    private static WebhookEvent createEvent() {
+    private WebhookEvent createEvent() {
         return WebhookEvent.builder()
-                .webhookUrl("https://webhook.site/8bb16cbc-20bd-4677-b851-6417ddb24a19")
+                .webhookUrl(webhookSite)
                 .id(UUID.randomUUID().toString())
                 .retryCount(0)
                 .build();
@@ -71,17 +83,44 @@ public class WebhookService {
         if (webhookLog == null || Objects.equals(webhookLog.getStatus(), "SUCCESS")) {
             return;
         }
-        webClient.post()
-                .uri(event.getWebhookUrl())
-                .bodyValue(event)
-                .retrieve()
-                .toBodilessEntity() // 응답코드만 받겠다
-                .doOnSuccess(v -> webhookStatusService.success(webhookLog.getId()))
-                .doOnError(e ->{
-                    log.error("Webhook send failed: {}", event.getId(), e);
-                    webhookStatusService.failure(webhookLog.getId());
-                        })
-                .subscribe();
+        try{
+            String body = objectMapper.writeValueAsString(event);
+            String signature = sign(body);
+
+            webClient.post()
+                    .uri(event.getWebhookUrl())
+                    .header("X-Webhook-Secret", signature)
+                    .header("X-Timestamp", String.valueOf(System.currentTimeMillis()))
+                    .bodyValue(body)
+                    .retrieve()
+                    .toBodilessEntity() // 응답코드만 받겠다
+                    .doOnSuccess(v -> webhookStatusService.success(webhookLog.getId()))
+                    .doOnError(e ->{
+                        log.error("Webhook send failed: {}", event.getId(), e);
+                        webhookStatusService.failure(webhookLog.getId());
+                    })
+                    .subscribe();
+        } catch (JsonProcessingException e){
+            log.error("Webhook JSON 변환 실패: {}", event.getId(), e);
+        }
+
+    }
+
+    // HMAC-SHA256 서명 생성
+    private String sign(String payload) {
+        try{
+            SecretKey secretKey = new SecretKeySpec(
+                    webhookSecret.getBytes(StandardCharsets.UTF_8),
+                    "HmacSHA256"
+            );
+            Mac mac = Mac.getInstance("HmacSHA256");
+            mac.init(secretKey);
+            byte[] hmac = mac.doFinal(payload.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(hmac);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /*

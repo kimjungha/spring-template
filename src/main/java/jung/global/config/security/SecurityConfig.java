@@ -38,7 +38,7 @@ public class SecurityConfig {
         "/swagger-resources/**",  //  Swagger 설정
         "/docs/**",
         "/products/**",
-        "/webhook/**"   ,
+        "/webhook/**",
         "/actuator/**",
         "/sse/connect",      // sse 연결
         "/payment/confirm/**", // 결제 확인 엔드포인트

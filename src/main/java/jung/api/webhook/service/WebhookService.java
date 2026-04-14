@@ -91,6 +91,7 @@ public class WebhookService {
                     .uri(event.getWebhookUrl())
                     .header("X-Webhook-Secret", signature)
                     .header("X-Timestamp", String.valueOf(System.currentTimeMillis()))
+                    .header("Idempotency-Key",UUID.randomUUID().toString()) // 멱등성 키
                     .bodyValue(body)
                     .retrieve()
                     .toBodilessEntity() // 응답코드만 받겠다

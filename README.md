@@ -26,6 +26,47 @@ docker-compose up -d
 
 ---
 
+## 프로젝트 구조
+-  도메인 중심으로 패키지를 구성하여 DDD 지향이지만, 완전한 DDD 구조는 아닙니다.
+
+```
+├── docs/                           # 기술 문서 및 설계 정리
+│   ├── WebHook 재전송 프로세스.md
+│   ├── DistruibutedAop설명.md
+│   ├── Error 설계.md
+│   ├── 로그인에 대해.md
+│   └── ...
+├── docker-compose.yml              # 인프라 컨테이너 설정
+├── sonar-project.properties        # SonarQube 정적 분석 설정
+├── build.gradle
+└── src/main/java/jung/
+    ├── SprintTemplateApplication.java
+    ├── api/
+    │   ├── chat/                   # WebSocket 실시간 채팅
+    │   ├── erp/
+    │   │   ├── book/               # 도서 조회 (QueryDSL)
+    │   │   ├── coupon/             # 쿠폰 (Redisson 분산락)
+    │   │   ├── customer/           # 고객 관리
+    │   │   └── product/            # 상품 검색 (Elasticsearch)
+    │   ├── login/                  # Spring Security + JWT 인증
+    │   ├── oms/goods/              # 상품 주문
+    │   ├── payment/                # 결제 (SSE 상태 푸시)
+    │   ├── wallet/                 # 지갑 (gRPC)
+    │   ├── webhook/                # Webhook 전송 (Kafka)
+    │   └── SseController.java
+    ├── global/
+    │   ├── annotation/             # 커스텀 애너테이션 (분산락, API 추적 등)
+    │   ├── aspect/                 # AOP (트랜잭션 분리, API 추적)
+    │   ├── config/                 # 설정 (DB Replication, Redis, Security, Swagger)
+    │   ├── error/ & exception/     # 공통 에러 코드 및 예외 처리
+    │   └── utils/
+    ├── grpc/                       # gRPC 서버
+    ├── infrastructure/             # SSE 레지스트리
+    └── jwt/                        # JWT 필터 및 토큰 프로바이더
+```
+
+---
+
 ## 구현 기능 목록
 
 ### AOP

@@ -2,7 +2,7 @@ package jung;
 
 import jung.api.erp.coupon.domain.entity.Coupon;
 import jung.api.erp.coupon.domain.repository.CouponRepository;
-import jung.global.config.database.JPAConfig;
+import jung.global.config.database.JpaConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Import;
 import java.math.BigDecimal;
 
 @SpringBootTest
-@Import({JPAConfig.class})
+@Import({JpaConfig.class})
 public class CouponTest {
     @Autowired
     private CouponRepository couponRepository;

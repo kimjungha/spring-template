@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import jung.global.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,29 +21,24 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class UserEntity extends BaseEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT 사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50) // 중복 불가
-    private String username;
-
-    @Column(nullable = false)
-    private String password; // BCrypt 암호화된 비밀번호 저장
-
-    @Column(nullable = false, length = 20)
-    private String role; // 예: ROLE_USER, ROLE_ADMIN
-
-    @Column(nullable = false, unique = true, length = 100) // 이메일 중복 방지
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private String password;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    @Column(nullable = false, length = 50)
+    private String name;
 
-    }
+    @Column(nullable = false, length = 20)
+    private String role;
+
+    @Column(nullable = false, length = 20)
+    private String authorities;
 }

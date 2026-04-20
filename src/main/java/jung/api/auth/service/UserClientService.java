@@ -1,4 +1,4 @@
-package jung.api.login.service;
+package jung.api.auth.service;
 
 import jung.api.grpc.UserProto;
 import jung.api.grpc.UserServiceGrpc;

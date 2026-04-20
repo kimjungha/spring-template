@@ -1,4 +1,4 @@
-package jung.api.login;
+package jung.api.auth;
 
 public enum Role {
     USER, ADMIN

@@ -1,10 +1,10 @@
-package jung.api.login.service;
+package jung.api.auth.service;
 
-import jung.api.login.UserEntity;
-import jung.api.login.controller.response.LoginResponse;
-import jung.api.login.controller.request.LoginRequest;
-import jung.api.login.controller.request.SignupRequest;
-import jung.api.login.repository.UserRepository;
+import jung.api.auth.UserEntity;
+import jung.api.auth.controller.response.LoginResponse;
+import jung.api.auth.controller.request.LoginRequest;
+import jung.api.auth.controller.request.SignupRequest;
+import jung.api.auth.repository.UserRepository;
 import jung.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class LoginService {
+public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
@@ -29,31 +29,20 @@ public class LoginService {
 
         Authentication authentication;
         try {
-            authentication =  authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
             );
         } catch (BadCredentialsException e) {
             throw new Exception("사용자 아이디, 비밀번호가 다르거나 등록된 사용자가 없습니다.");
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new Exception("로그인 과정에서 알 수 없는 오류 발생: " + e.getMessage());
         }
 
         return LoginResponse.builder()
-            .accessToken(jwtTokenProvider.generateAccessToken(authentication))
-            .build();
-    }
-
-    @Transactional
-    public void signup(SignupRequest request) {
-
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
-        }
-
-        String encodePw = passwordEncoder.encode(request.getPassword());
-        userRepository.save(UserEntity.create(request,encodePw));
+                .accessToken(jwtTokenProvider.generateAccessToken(authentication))
+                .build();
     }
 }

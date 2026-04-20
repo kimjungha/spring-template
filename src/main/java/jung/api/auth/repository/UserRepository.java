@@ -1,6 +1,6 @@
-package jung.api.login.repository;
+package jung.api.auth.repository;
 
-import jung.api.login.UserEntity;
+import jung.api.auth.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

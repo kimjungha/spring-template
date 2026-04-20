@@ -1,4 +1,4 @@
-package jung.api.login;
+package jung.api.auth;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -12,7 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
-import jung.api.login.controller.request.SignupRequest;
+import jung.api.auth.controller.request.SignupRequest;
 import jung.global.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;

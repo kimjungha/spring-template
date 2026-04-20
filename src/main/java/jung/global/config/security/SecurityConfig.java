@@ -39,8 +39,8 @@ public class SecurityConfig {
 
     private static final String[] IGNORES = new String[] {
         "/healthcheck",
-        "/login",
-        "/login/signup",
+        "/users",
+        "/auth/login",
         "/swagger-ui/**",
         "swagger-ui/index.html",
         "/swagger-resources/**",  //  Swagger 설정

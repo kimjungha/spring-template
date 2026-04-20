@@ -1,7 +1,7 @@
-package jung.api.login.service;
+package jung.api.auth.service;
 
-import jung.api.login.UserEntity;
-import jung.api.login.repository.UserRepository;
+import jung.api.auth.UserEntity;
+import jung.api.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

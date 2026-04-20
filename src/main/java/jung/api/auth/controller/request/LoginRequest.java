@@ -1,4 +1,4 @@
-package jung.api.login.controller.request;
+package jung.api.auth.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

@@ -1,4 +1,4 @@
-package jung.api.login.controller.response;
+package jung.api.auth.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

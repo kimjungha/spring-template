@@ -1,7 +1,9 @@
 package jung.global.config.security;
 
 import jung.jwt.JwtAuthenticationFilter;
+import jung.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+
 import net.devh.boot.grpc.server.autoconfigure.GrpcServerSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -27,12 +29,18 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableAutoConfiguration(exclude = {GrpcServerSecurityAutoConfiguration.class})
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtTokenProvider);
+    }
 
     private static final String[] IGNORES = new String[] {
         "/healthcheck",
         "/login",
-        "/signup",
+        "/login/signup",
         "/swagger-ui/**",
         "swagger-ui/index.html",
         "/swagger-resources/**",  //  Swagger 설정
@@ -53,7 +61,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         return http
             .httpBasic(AbstractHttpConfigurer::disable)      //base authentication 사용안함
             .formLogin(AbstractHttpConfigurer::disable)      //form login 비활성화

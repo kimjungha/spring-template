@@ -2,9 +2,9 @@ package jung.api.auth.controller;
 
 import jakarta.validation.Valid;
 import jung.api.auth.controller.request.LoginRequest;
-import jung.api.auth.controller.request.SignupRequest;
 import jung.api.auth.controller.response.LoginResponse;
 import jung.api.auth.service.AuthService;
+import jung.global.annotation.DuplicateAnnotation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @DuplicateAnnotation
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) throws Exception {
         return ResponseEntity.status(HttpStatus.OK).body(authService.login(request));

@@ -16,7 +16,8 @@ logging:
 
 jwt:
   secret_key: Q5k8eK7r9P4vZ1xY0aN+7mHc2uZ0D1S4n8wJ6rE9A=45461616161
-  expired: 3600000
+  expired: 360000
+  refresh-expired: 1209600000
 management:
   server:
     port: 8081

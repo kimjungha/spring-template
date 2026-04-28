@@ -22,27 +22,30 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class JwtTokenProvider {
 
     private final SecretKey secretKey;
-    private final long expirationMs;
+    private final long accessTokenExpirationMs;
+    private final long refreshTokenExpirationMs;
 
     public JwtTokenProvider(
         @Value("${jwt.secret_key}") String secret_key,
-        @Value("${jwt.expired}") long expirationMs
+        @Value("${jwt.expired}") long accessTokenExpirationMs,
+        @Value("${jwt.refresh-expired}") long refreshTokenExpirationMs
     ) {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret_key));
-        this.expirationMs = expirationMs;
+        this.accessTokenExpirationMs = accessTokenExpirationMs;
+        this.refreshTokenExpirationMs = refreshTokenExpirationMs;
     }
 
     public String generateAccessToken(Authentication authentication) {
-
-        String username = authentication.getName();
 
         String role = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
@@ -50,18 +53,31 @@ public class JwtTokenProvider {
             .findFirst()
             .orElse("ROLE_USER");
 
-        List<String> authorities = authentication.getAuthorities().stream()
+        String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .filter(a -> !a.startsWith("ROLE_"))
-            .toList();
+            .collect(Collectors.joining(","));
 
         Date now = new Date();
         return Jwts.builder()
-            .setSubject(username)
+            .setSubject(authentication.getName())
             .claim("role", role)
             .claim("authorities", authorities)
             .setIssuedAt(now)
-            .setExpiration(new Date(now.getTime() + expirationMs))
+            .setExpiration(new Date(now.getTime() + accessTokenExpirationMs))
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    public String generateRefreshToken(Authentication authentication) {
+
+        Date now = new Date();
+
+        return Jwts.builder()
+            .setSubject(authentication.getName())
+            .claim("type", "refresh")
+            .setIssuedAt(now)
+            .setExpiration(new Date(now.getTime() + refreshTokenExpirationMs))
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact();
     }
@@ -86,31 +102,49 @@ public class JwtTokenProvider {
     }
 
     public void setAuthentication(String accessToken) {
+
         Claims claims = Jwts.parserBuilder()
-            .setSigningKey(secretKey)
-            .build()
-            .parseClaimsJws(accessToken)
-            .getBody();
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody();
 
-        String username = claims.getSubject();
-        String role = claims.get("role", String.class);
+        List<GrantedAuthority> authorities = getRoleAndAuthorities(claims);
+        UserDetails userDetails = new User(claims.getSubject(), "", authorities);
 
-        @SuppressWarnings("unchecked")
-        List<String> authorities = (List<String>) claims.get("authorities");
-
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        if (role != null) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role));
-        }
-        if (authorities != null) {
-            authorities.stream()
-                .map(SimpleGrantedAuthority::new)
-                .forEach(grantedAuthorities::add);
-        }
-
-        UserDetails userDetails = new User(username, "", grantedAuthorities);
         UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(userDetails, null, grantedAuthorities);
+            new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private List<GrantedAuthority> getRoleAndAuthorities(Claims claims){
+
+        List<GrantedAuthority> result = new ArrayList<>();
+
+        String role = claims.get("role", String.class);
+        if (role != null) {
+            result.add(new SimpleGrantedAuthority(role));
+        }
+
+        String raw = claims.get("authorities",String.class);
+        List<String> authorities = (raw != null && !raw.isBlank())?
+                Arrays.asList(raw.split(",")):
+                List.of();
+
+        if (!authorities.isEmpty()) {
+            authorities.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .forEach(result::add);
+        }
+        return result;
+    }
+
+    public Claims getClaims(String token){
+       return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

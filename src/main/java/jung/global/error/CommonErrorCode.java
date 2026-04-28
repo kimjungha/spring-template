@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum CommonErrorCode implements ErrorCode {
 
+    // auth
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "400", "리프레시 토큰이 유효하지 않습니다"),
+
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "400", "요청값이 잘못되었습니다."),
     INVALID_STATUS_VALUE(HttpStatus.BAD_REQUEST, "401", "요청한 상태값이 잘못되었습니다."),
     INVALID_NOT_VALID(HttpStatus.BAD_REQUEST, "402", "요청값 검증에 실패하였습니다."),

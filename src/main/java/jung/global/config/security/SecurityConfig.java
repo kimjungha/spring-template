@@ -40,7 +40,7 @@ public class SecurityConfig {
     private static final String[] IGNORES = new String[] {
         "/healthcheck",
         "/users",
-        "/auth/login",
+        "/auth/**",
         "/swagger-ui/**",
         "swagger-ui/index.html",
         "/swagger-resources/**",  //  Swagger 설정

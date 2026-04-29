@@ -44,15 +44,30 @@ public class AuthController {
     public ResponseEntity<LoginResponse> refresh(
             @CookieValue(name = "refreshToken") String refreshToken,
             HttpServletResponse response
-    ){
+    ) {
 
         LoginResponse result = authService.refresh(refreshToken);
-        setRefreshTokenCookie(response,result.getRefreshToken());
+        setRefreshTokenCookie(response, result.getRefreshToken());
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
 
     }
 
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
+    public ResponseEntity<Void> logout(
+            @CookieValue(name = "refreshToken") String refreshToken,
+            HttpServletResponse response
+    ) {
+        authService.logout(refreshToken);
+        clearRefreshTokenCookie(response);
+        return ResponseEntity.status(HttpStatus.OK).build();
+
+    }
+
+    /**
+     * 헤더 쿠키에 refresh Token 셋팅
+     */
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
@@ -64,4 +79,17 @@ public class AuthController {
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 
+    /**
+     * 로그아웃시 쿠키 다른 값으로 대체
+     */
+    private void clearRefreshTokenCookie(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/auth/refresh")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
 }

@@ -73,7 +73,7 @@ public class AuthService {
         Claims claims = jwtTokenProvider.getClaims(refreshToken);
         String type = claims.get("type",String.class);
 
-        // 3. isRefresh 확인
+        // 3. refresh token 확인
         if(!"refresh".equals(type)){
             throw new BusinessException(CommonErrorCode.INVALID_REFRESH_TOKEN);
         }
@@ -103,5 +103,20 @@ public class AuthService {
                 .refreshToken(newRefreshToken)
                 .build();
 
+    }
+
+    /** 로그아웃 : Redis 에 저장된 refresh Token 삭제 */
+    public void logout(String refreshToken) {
+
+        Claims claims = jwtTokenProvider.getClaimsIgnoreExpiry(refreshToken);
+        String email = claims.getSubject();
+        String type = claims.get("type",String.class);
+
+        // refresh token 확인
+        if(!"refresh".equals(type)){
+            throw new BusinessException(CommonErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        redisTemplate.delete("RefreshToken::"+email);
     }
 }

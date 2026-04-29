@@ -101,6 +101,18 @@ public class JwtTokenProvider {
         return false;
     }
 
+    public Claims getClaimsIgnoreExpiry(String jwtToken) {
+        try {
+            return  Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(jwtToken)
+                    .getBody();
+        }  catch (ExpiredJwtException e) {
+           return e.getClaims(); // 로그아웃에서 사용할 예정이어 만료된 토큰도 Claims 반환
+        }
+    }
+
     public void setAuthentication(String accessToken) {
 
         Claims claims = Jwts.parserBuilder()

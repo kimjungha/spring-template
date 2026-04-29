@@ -101,6 +101,13 @@ public class JwtTokenProvider {
         return false;
     }
 
+    public void validateTokenThrowException(String jwtToken) {
+        Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(jwtToken);
+    }
+
     public Claims getClaimsIgnoreExpiry(String jwtToken) {
         try {
             return  Jwts.parserBuilder()

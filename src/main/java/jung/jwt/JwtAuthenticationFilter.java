@@ -1,9 +1,13 @@
 package jung.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jung.global.error.CommonErrorCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,11 +39,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         String token = authHeader.substring(7);
 
-        if(jwtTokenProvider.validateToken(token)){
+        try{
+            jwtTokenProvider.validateTokenThrowException(token);
             jwtTokenProvider.setAuthentication(token);
+        } catch (ExpiredJwtException e) {
+            setErrorResponse(response, CommonErrorCode.EXPIRED_ACCESS_TOKEN);
+            return;
+        } catch (SecurityException | JwtException e) {
+            setErrorResponse(response, CommonErrorCode.INVALID_ACCESS_TOKEN);
+            return;
         }
-
         filterChain.doFilter(request,response);
+    }
+
+    private void setErrorResponse(HttpServletResponse response, CommonErrorCode errorCode){
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        try {
+            response.getWriter().write("{\"error\": \"" + errorCode.getMessage() + "\"}");
+        } catch (IOException e) {
+            log.error("Error writing error response: {}", e.getMessage());
+        }
     }
 
 }

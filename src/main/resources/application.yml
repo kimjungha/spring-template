@@ -80,3 +80,9 @@ wallet:
 webhook:
   secret: 3f2a1b9c8d7e6f5a4b3c2d1e0f9a8b7c
   site : https://webhook.site/1b33c2ea-4434-42a3-b6d6-280bb9c4712f
+
+cors:
+  allowed-origins:
+  - "http://localhost:3000"
+  - "http://localhost:3001"
+  - "http://localhost:3002"
